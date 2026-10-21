@@ -86,7 +86,17 @@ def main():
 
         logger.debug("Solicitud enviada al servidor.")
 
-        response_data = client_socket.recv(4096)
+        response_chunks = []
+
+        while True:
+            chunk = client_socket.recv(4096)
+
+            if not chunk:
+                break
+
+            response_chunks.append(chunk)
+
+        response_data = b"".join(response_chunks)
 
         if response_data:
             response = json.loads(response_data.decode("utf-8"))

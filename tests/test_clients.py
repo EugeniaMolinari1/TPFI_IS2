@@ -90,8 +90,10 @@ def test_singletonclient_success(monkeypatch):
     )
 
     client_socket = MagicMock()
-    client_socket.recv.return_value = json.dumps({"id": "TEST"}).encode("utf-8")
-
+    client_socket.recv.side_effect = [
+        json.dumps({"id": "TEST"}).encode("utf-8"),
+        b"",
+    ]
     monkeypatch.setattr(
         singletonclient.socket,
         "socket",
