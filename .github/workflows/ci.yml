@@ -1,0 +1,64 @@
+
+name: CI - TPFI IS2
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  verificar:
+    runs-on: ubuntu-latest
+
+    env:
+      AWS_ACCESS_KEY_ID: testing
+      AWS_SECRET_ACCESS_KEY: testing
+      AWS_DEFAULT_REGION: us-east-1
+      AWS_EC2_METADATA_DISABLED: "true"
+      PYTHONPATH: src
+
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Instalar dependencias
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+
+      - name: Verificar Ruff
+        run: python -m ruff check .
+
+      - name: Verificar Black
+        run: python -m black --check .
+
+      - name: Verificar PEP 8
+        run: python -m pycodestyle --config=.pycodestyle src tests
+
+      - name: Verificar PEP 257
+        run: python -m pydocstyle src
+
+      - name: Verificar MyPy
+        run: python -m mypy src
+
+      - name: Verificar PyRight
+        run: python -m pyright src
+
+      - name: Analizar seguridad con Bandit
+        run: python -m bandit -r src
+
+      - name: Ejecutar pruebas y cobertura
+        run: python -m pytest tests --cov=src --cov-report=term-missing --cov-fail-under=85
+
+      - name: Generar documentación
+        run: python -m pdoc -o docs src
+
+      - name: Guardar documentación generada
+        uses: actions/upload-artifact@v4
+        with:
+          name: documentacion-tpfi
+          path: docs/

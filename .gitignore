@@ -1,0 +1,42 @@
+
+# Entornos virtuales
+venv/
+.venv/
+
+# Credenciales y configuraciones sensibles
+.env
+.env.*
+.aws/
+credentials
+*.pem
+*.key
+
+# Archivos JSON de entrada y salida
+input_*.json
+output_*.json
+
+# Archivos temporales de Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.pyright/
+
+# Resultados de cobertura
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+
+# Logs y archivos temporales
+*.log
+*.tmp
+
+# Configuracion local de editores
+.vscode/
+.idea/
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
